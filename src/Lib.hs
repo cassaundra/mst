@@ -4,25 +4,16 @@ module Lib
   )
 where
 
-import           Control.Arrow          (right)
-import           Control.Monad          (join, void)
-import           Control.Monad.IO.Class (liftIO)
-import           Data.Bifunctor         (Bifunctor (bimap))
-import           Data.Foldable          (find, fold, minimumBy)
-import           Data.Function          (on)
-import qualified Data.Graph             as U
-import           Data.Graph.Types       (IsEdge (originVertex))
-import qualified Data.Graph.Types       as G
-import qualified Data.Graph.UGraph      as G
+import           Control.Monad     (join)
+import           Data.Bifunctor    (Bifunctor (bimap))
+import           Data.Foldable     (find, fold)
+import           Data.Function     (on)
+import qualified Data.Graph.Types  as G
+import qualified Data.Graph.UGraph as G
 import           Data.Hashable
-import           Data.List              (intercalate)
-import qualified Data.List              as L
-import           Data.Maybe             (fromJust)
-import           Data.Semigroup         (Sum (Sum, getSum))
-import           Data.Set               ((\\))
-import qualified Data.Set               as S
-import           Data.Void              (Void)
-import           Debug.Trace
+import qualified Data.List         as L
+import           Data.Maybe        (fromJust)
+import qualified Data.Set          as S
 
 -- XXX hack in order to let us use a set of graphs
 -- will remove soon
@@ -80,7 +71,3 @@ bestEdges = L.sortOn G.attribute . G.edges
 -- wouldExpand :: G.UGraph v e -> (v, v) -> Bool
 wouldExpand :: (G.Graph g, Hashable v, Eq v) => g v e -> (v, v) -> Bool
 wouldExpand graph (a, b) = G.containsVertex graph a /= G.containsVertex graph b
-
--- | Sum the weights of a graph.
-sumWeights :: (Num a, Hashable v, Eq v) => G.UGraph v a -> a
-sumWeights graph = getSum $ foldMap (Sum . G.attribute) (G.edges graph)
